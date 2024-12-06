@@ -1,0 +1,115 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright (c) 2019 KapaXL (kapa.xl@outlook.com)
+ *
+ * QEMU-Virt-AArch64 (cortex-a35/cortex-a53/cortex-a55/
+ * cortex-a57/cortex-a72/cortex-a76/cortex-a710/
+ * neoverse-n1/neoverse-v1/neoverse-n2) x 4
+ */
+
+/dts-v1/;
+
+#include "memory.dtsi"
+
+/ {
+	model = "QEMU-VIRT-AARCH64";
+	compatible = "qemu,aarch64-virt";
+	interrupt-parent = <&gic>;
+	#address-cells = <2>;
+	#size-cells = <2>;
+
+	chosen { };
+
+	aliases {
+		serial0 = &v2m_serial0;
+	};
+
+	cpus {
+		#address-cells = <2>;
+		#size-cells = <0>;
+
+		cpu@0 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			enable-method = "psci";
+			reg = <0 0>;
+			next-level-cache = <&L2_0>;
+		};
+
+		cpu@1 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			enable-method = "psci";
+			reg = <0 1>;
+			next-level-cache = <&L2_0>;
+		};
+
+		cpu@2 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			enable-method = "psci";
+			reg = <0 2>;
+			next-level-cache = <&L2_0>;
+		};
+
+		cpu@3 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			enable-method = "psci";
+			reg = <0 3>;
+			next-level-cache = <&L2_0>;
+		};
+
+		L2_0: l2-cache0 {
+			compatible = "cache";
+		};
+	};
+
+	psci {
+		compatible = "arm,psci-0.2";
+		method = "smc";
+	};
+
+	gic: interrupt-controller@8000000 {
+        compatible = "arm,gic-v3";
+		#interrupt-cells = <3>;
+		interrupt-controller;
+		reg = <0 0x08000000 0 0x10000>,
+		      <0 0x080A0000 0 0x200000>;
+/*
+		#address-cells = <2>;
+		#size-cells = <2>;
+
+        its@8080000 {
+                reg = <0x00 0x8080000 0x00 0x20000>;
+                #msi-cells = <0x01>;
+                msi-controller;
+                compatible = "arm,gic-v3-its";
+        };
+*/
+	};
+
+	timer {
+		compatible = "arm,armv8-timer";
+		interrupts = <1 13 0xf08>,
+			     <1 14 0xf08>,
+			     <1 11 0xf08>,
+			     <1 10 0xf08>;
+	};
+
+	v2m_clk24mhz: clk24mhz@0 {
+		compatible = "fixed-clock";
+		#clock-cells = <0>;
+		reg = <0 0 0 0>;
+		clock-frequency = <24000000>;
+		clock-output-names = "v2m:clk24mhz";
+	};
+
+	v2m_serial0: uart@9000000 {
+		compatible = "arm,pl011", "arm,primecell";
+		reg = <0 0x9000000 0 0x1000>;
+		interrupts = <0 1 0xf04>;
+		clocks = <&v2m_clk24mhz>, <&v2m_clk24mhz>;
+		clock-names = "uartclk", "apb_pclk";
+	};
+};

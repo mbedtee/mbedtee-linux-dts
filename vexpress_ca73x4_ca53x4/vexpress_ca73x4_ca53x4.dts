@@ -1,0 +1,175 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright (c) 2019 KapaXL (kapa.xl@outlook.com)
+ *
+ * FVP_Base_Cortex_A73x4_A53x4, FVP_Base_Cortex_A72x4_A53x4
+ * FVP_Base_Cortex_A57x4_A53x4, FVP_Base_Cortex_A72x4_A35x4
+ * FVP_Base_Cortex_A57x4_A35x4
+ */
+
+/dts-v1/;
+
+#include "memory.dtsi"
+#include "vexpress_ca73x4_ca53x4m.dtsi"
+
+/ {
+	model = "FVP_Base_Cortex_A73x4_A53x4";
+	compatible = "arm,vexpress";
+	interrupt-parent = <&gic>;
+	#address-cells = <2>;
+	#size-cells = <2>;
+
+	chosen { };
+
+	aliases {
+		serial0 = &v2m_serial0;
+	};
+
+	cpus {
+		#address-cells = <2>;
+		#size-cells = <0>;
+
+		cpu-map {
+			cluster0 {
+				core0 {
+					cpu = <&A73_0>;
+				};
+				core1 {
+					cpu = <&A73_1>;
+				};
+				core2 {
+					cpu = <&A73_2>;
+				};
+				core3 {
+					cpu = <&A73_3>;
+				};
+			};
+
+			cluster1 {
+				core0 {
+					cpu = <&A53_0>;
+				};
+				core1 {
+					cpu = <&A53_1>;
+				};
+				core2 {
+					cpu = <&A53_2>;
+				};
+				core3 {
+					cpu = <&A53_3>;
+				};
+			};
+		};
+
+		A73_0: cpu@0 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a73";
+			reg = <0 0>;
+			enable-method = "psci";
+			next-level-cache = <&A73_L2>;
+			capacity-dmips-mhz = <1024>;
+			dynamic-power-coefficient = <450>;
+		};
+
+		A73_1: cpu@1 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a73";
+			reg = <0 1>;
+			enable-method = "psci";
+			next-level-cache = <&A73_L2>;
+			capacity-dmips-mhz = <1024>;
+			dynamic-power-coefficient = <450>;
+		};
+
+		A73_2: cpu@2 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a73";
+			reg = <0 2>;
+			enable-method = "psci";
+			next-level-cache = <&A73_L2>;
+			capacity-dmips-mhz = <1024>;
+			dynamic-power-coefficient = <450>;
+		};
+
+		A73_3: cpu@3 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a73";
+			reg = <0 3>;
+			enable-method = "psci";
+			next-level-cache = <&A73_L2>;
+			capacity-dmips-mhz = <1024>;
+			dynamic-power-coefficient = <450>;
+		};
+
+		A53_0: cpu@100 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a53";
+			reg = <0 0x100>;
+			enable-method = "psci";
+			next-level-cache = <&A53_L2>;
+			capacity-dmips-mhz = <485>;
+			dynamic-power-coefficient = <140>;
+		};
+
+		A53_1: cpu@101 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a53";
+			reg = <0 0x101>;
+			enable-method = "psci";
+			next-level-cache = <&A53_L2>;
+			capacity-dmips-mhz = <485>;
+			dynamic-power-coefficient = <140>;
+		};
+
+		A53_2: cpu@102 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a53";
+			reg = <0 0x102>;
+			enable-method = "psci";
+			next-level-cache = <&A53_L2>;
+			capacity-dmips-mhz = <485>;
+			dynamic-power-coefficient = <140>;
+		};
+
+		A53_3: cpu@103 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a53";
+			reg = <0 0x103>;
+			enable-method = "psci";
+			next-level-cache = <&A53_L2>;
+			capacity-dmips-mhz = <485>;
+			dynamic-power-coefficient = <140>;
+		};
+
+		A73_L2: l2-cache0 {
+			compatible = "cache";
+		};
+
+		A53_L2: l2-cache1 {
+			compatible = "cache";
+		};
+	};
+
+	psci {
+		compatible = "arm,psci-0.2";
+		method = "smc";
+	};
+
+	gic: interrupt-controller@2f000000 {
+        compatible = "arm,gic-v3";
+        #interrupt-cells = <3>;
+		#address-cells = <0>;
+        interrupt-controller;
+        reg = <0x0 0x2f000000 0 0x10000>,       // GICD
+              <0x0 0x2f100000 0 0x200000>;      // GICR
+        interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+    };
+
+	timer {
+		compatible = "arm,armv8-timer";
+		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
+	};
+};

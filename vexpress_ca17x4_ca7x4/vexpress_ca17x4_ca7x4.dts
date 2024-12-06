@@ -1,0 +1,193 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright (c) 2019 KapaXL (kapa.xl@outlook.com)
+ *
+ * FVP_VE_CA17x4_CA7x4 or FVP_VE_CA15x4_CA7x4
+ */
+
+/dts-v1/;
+
+#include "memory.dtsi"
+#include "vexpress_ca17x4_ca7x4m.dtsi"
+
+/ {
+	model = "FVP-VE-CA17x4_CA7x4";
+	compatible = "arm,vexpress";
+	interrupt-parent = <&gic>;
+	#address-cells = <2>;
+	#size-cells = <1>;
+
+	chosen { };
+
+	aliases {
+		serial0 = &v2m_serial0;
+	};
+
+	cpus {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		cpu-map {
+			cluster0 {
+				core0 {
+					cpu = <&A17_0>;
+				};
+				core1 {
+					cpu = <&A17_1>;
+				};
+				core2 {
+					cpu = <&A17_2>;
+				};
+				core3 {
+					cpu = <&A17_3>;
+				};
+			};
+
+			cluster1 {
+				core0 {
+					cpu = <&A7_0>;
+				};
+				core1 {
+					cpu = <&A7_1>;
+				};
+				core2 {
+					cpu = <&A7_2>;
+				};
+				core3 {
+					cpu = <&A7_3>;
+				};
+			};
+		};
+
+		A17_0: cpu@0 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a17";
+			reg = <0>;
+			enable-method = "psci";
+			capacity-dmips-mhz = <1024>;
+			dynamic-power-coefficient = <310>;
+		};
+
+		A17_1: cpu@1 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a17";
+			reg = <1>;
+			enable-method = "psci";
+			capacity-dmips-mhz = <1024>;
+			dynamic-power-coefficient = <310>;
+		};
+
+		A17_2: cpu@2 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a17";
+			reg = <2>;
+			enable-method = "psci";
+			capacity-dmips-mhz = <1024>;
+			dynamic-power-coefficient = <310>;
+		};
+
+		A17_3: cpu@3 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a17";
+			reg = <3>;
+			enable-method = "psci";
+			capacity-dmips-mhz = <1024>;
+			dynamic-power-coefficient = <310>;
+		};
+
+		A7_0: cpu@100 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a7";
+			reg = <0x100>;
+			enable-method = "psci";
+			capacity-dmips-mhz = <539>;
+			dynamic-power-coefficient = <90>;
+		};
+
+		A7_1: cpu@101 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a7";
+			reg = <0x101>;
+			enable-method = "psci";
+			capacity-dmips-mhz = <539>;
+			dynamic-power-coefficient = <90>;
+		};
+
+		A7_2: cpu@102 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a7";
+			reg = <0x102>;
+			enable-method = "psci";
+			capacity-dmips-mhz = <539>;
+			dynamic-power-coefficient = <90>;
+		};
+
+		A7_3: cpu@103 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a7";
+			reg = <0x103>;
+			enable-method = "psci";
+			capacity-dmips-mhz = <539>;
+			dynamic-power-coefficient = <90>;
+		};
+	};
+
+	psci {
+		compatible = "arm,psci-0.2";
+		method = "smc";
+	};
+
+	gic: interrupt-controller@2c001000 {
+		compatible = "arm,cortex-a15-gic", "arm,cortex-a7-gic";
+		#interrupt-cells = <3>;
+		#address-cells = <0>;
+		interrupt-controller;
+		reg = <0 0x2c001000 0x1000>,
+		      <0 0x2c002000 0x2000>,
+		      <0 0x2c004000 0x2000>,
+		      <0 0x2c006000 0x2000>;
+		interrupts = <1 9 0xf04>;
+	};
+
+	timer {
+		compatible = "arm,armv7-timer";
+		interrupts = <1 13 0xf08>,
+			     <1 14 0xf08>,
+			     <1 11 0xf08>,
+			     <1 10 0xf08>;
+	};
+
+	smb@8000000 {
+		compatible = "simple-bus";
+
+		#address-cells = <2>;
+		#size-cells = <1>;
+
+		ranges = <0 0 0 0x08000000 0x04000000>,
+			 <1 0 0 0x14000000 0x04000000>,
+			 <2 0 0 0x18000000 0x04000000>,
+			 <3 0 0 0x1c000000 0x04000000>,
+			 <4 0 0 0x0c000000 0x04000000>,
+			 <5 0 0 0x10000000 0x04000000>;
+
+		#interrupt-cells = <1>;
+		interrupt-map-mask = <0 0 63>;
+		interrupt-map = <0 0  0 &gic 0  0 4>,
+				<0 0  1 &gic 0  1 4>,
+				<0 0  2 &gic 0  2 4>,
+				<0 0  3 &gic 0  3 4>,
+				<0 0  4 &gic 0  4 4>,
+				<0 0  5 &gic 0  5 4>,
+				<0 0  6 &gic 0  6 4>,
+				<0 0  7 &gic 0  7 4>,
+				<0 0  8 &gic 0  8 4>,
+				<0 0  9 &gic 0  9 4>,
+				<0 0 10 &gic 0 10 4>,
+				<0 0 11 &gic 0 11 4>,
+				<0 0 12 &gic 0 12 4>,
+				<0 0 13 &gic 0 13 4>,
+				<0 0 14 &gic 0 14 4>,
+				<0 0 15 &gic 0 15 4>,
+				<0 0 16 &gic 0 16 4>;
+	};
+};
