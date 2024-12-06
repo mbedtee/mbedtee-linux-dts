@@ -13,10 +13,10 @@
 /dts-v1/;
 
 #include "memory.dtsi"
-#include "vexpress_ca75m.dtsi"
+#include "vexpress_ca78m.dtsi"
 
 / {
-	model = "FVP_Base_Cortex_A75x4";
+	model = "FVP_Base_Cortex_A78x4";
 	compatible = "arm,vexpress";
 	interrupt-parent = <&gic>;
 	#address-cells = <2>;
@@ -34,7 +34,7 @@
 
 		cpu@0 {
 			device_type = "cpu";
-			compatible = "arm,cortex-a75";
+			compatible = "arm,cortex-a78";
 			reg = <0 0>;
 			enable-method = "psci";
 			next-level-cache = <&L2_0>;
@@ -42,7 +42,7 @@
 
 		cpu@100 {
 			device_type = "cpu";
-			compatible = "arm,cortex-a75";
+			compatible = "arm,cortex-a78";
 			reg = <0 0x100>;
 			enable-method = "psci";
 			next-level-cache = <&L2_0>;
@@ -50,7 +50,7 @@
 
 		cpu@200 {
 			device_type = "cpu";
-			compatible = "arm,cortex-a75";
+			compatible = "arm,cortex-a78";
 			reg = <0 0x200>;
 			enable-method = "psci";
 			next-level-cache = <&L2_0>;
@@ -58,7 +58,7 @@
 
 		cpu@300 {
 			device_type = "cpu";
-			compatible = "arm,cortex-a75";
+			compatible = "arm,cortex-a78";
 			reg = <0 0x300>;
 			enable-method = "psci";
 			next-level-cache = <&L2_0>;
