@@ -71,30 +71,30 @@
 	};
 
 	gic: interrupt-controller@8000000 {
-        compatible = "arm,gic-v3";
+		compatible = "arm,gic-v3";
 		#interrupt-cells = <3>;
 		interrupt-controller;
 		reg = <0 0x08000000 0 0x10000>,
-		      <0 0x080A0000 0 0x200000>;
+			  <0 0x080A0000 0 0x200000>;
 /*
-		#address-cells = <2>;
-		#size-cells = <2>;
-
-        its@8080000 {
-                reg = <0x00 0x8080000 0x00 0x20000>;
-                #msi-cells = <0x01>;
-                msi-controller;
-                compatible = "arm,gic-v3-its";
-        };
-*/
+ *		#address-cells = <2>;
+ *		#size-cells = <2>;
+ *
+ *		its@8080000 {
+ *				reg = <0x00 0x8080000 0x00 0x20000>;
+ *				#msi-cells = <0x01>;
+ *				msi-controller;
+ *				compatible = "arm,gic-v3-its";
+ *		};
+ */
 	};
 
 	timer {
 		compatible = "arm,armv8-timer";
 		interrupts = <1 13 0xf08>,
-			     <1 14 0xf08>,
-			     <1 11 0xf08>,
-			     <1 10 0xf08>;
+				 <1 14 0xf08>,
+				 <1 11 0xf08>,
+				 <1 10 0xf08>;
 	};
 
 	v2m_clk24mhz: clk24mhz@0 {

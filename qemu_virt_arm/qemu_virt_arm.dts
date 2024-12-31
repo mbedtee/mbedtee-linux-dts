@@ -70,9 +70,9 @@
 		#address-cells = <0>;
 		interrupt-controller;
 		reg = <0 0x08000000 0x10000>,
-		      <0 0x08010000 0x10000>,
-              <0 0x08020000 0x2000>,
-		      <0 0x08030000 0x10000>;
+			  <0 0x08010000 0x10000>,
+			  <0 0x08020000 0x2000>,
+			  <0 0x08030000 0x10000>;
 
 		interrupts = <1 9 0xf04>;
 	};
@@ -80,9 +80,9 @@
 	timer {
 		compatible = "arm,armv7-timer";
 		interrupts = <1 13 0xf08>,
-			     <1 14 0xf08>,
-			     <1 11 0xf08>,
-			     <1 10 0xf08>;
+				 <1 14 0xf08>,
+				 <1 11 0xf08>,
+				 <1 10 0xf08>;
 	};
 
 	v2m_clk24mhz: clk24mhz@0 {
