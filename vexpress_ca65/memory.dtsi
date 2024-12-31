@@ -4,8 +4,8 @@
  */
 
 /{
-    #address-cells = <2>;
-    #size-cells = <2>;
+	#address-cells = <2>;
+	#size-cells = <2>;
 
 	memory@80000000 {
 		compatible = "memory";
@@ -18,14 +18,14 @@
 		rpc-t2r-shm = <0 0x85F30000 0 0x40000>;
 	};
 
-    reserved-memory {
-        #address-cells = <2>;
-        #size-cells = <2>;
-        ranges;
+	reserved-memory {
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
 
-        reserved: resv@80000000 {
+		reserved: resv@80000000 {
 			reg = <0 0x80000000 0 0x6000000>,
 				<1 0x00000000 7 0x80000000>;
-        };
-    };
+		};
+	};
 };
