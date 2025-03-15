@@ -1,0 +1,29 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright (c) 2019 KapaXL (kapa.xl@outlook.com)
+ */
+
+/{
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	memory@80000000 {
+		compatible = "memory";
+		device_type = "memory";
+
+		reg = <0x80000000 0x10000000>;
+
+		rpc-t2r-ring = <0x85F10000 0x20000>;
+		rpc-t2r-shm = <0x85F30000 0x40000>;
+	};
+
+	reserved-memory {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges;
+
+		tee_reserved: resv@80000000 {
+			reg = <0x80000000 0x6008000>;
+		};
+	};
+};
