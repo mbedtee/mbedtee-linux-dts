@@ -1,0 +1,105 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright (c) 2025 KapaXL (kapa.xl@outlook.com)
+ *
+ * qemu-raspi4b Cortex-A72x4 Minimum-System
+ */
+
+/dts-v1/;
+
+#include "memory.dtsi"
+
+/ {
+	model = "qemu-raspi4b";
+	compatible = "qemu,raspi4b";
+	interrupt-parent = <&gic>;
+	#address-cells = <2>;
+	#size-cells = <2>;
+
+	chosen { };
+
+	aliases {
+		serial0 = &v2m_serial0;
+	};
+
+	cpus {
+		#address-cells = <2>;
+		#size-cells = <0>;
+
+		cpu@0 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			enable-method = "psci";
+			reg = <0 0>;
+			next-level-cache = <&L2_0>;
+		};
+
+		cpu@1 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			enable-method = "psci";
+			reg = <0 1>;
+			next-level-cache = <&L2_0>;
+		};
+
+		cpu@2 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			enable-method = "psci";
+			reg = <0 2>;
+			next-level-cache = <&L2_0>;
+		};
+
+		cpu@3 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			enable-method = "psci";
+			reg = <0 3>;
+			next-level-cache = <&L2_0>;
+		};
+
+		L2_0: l2-cache0 {
+			compatible = "cache";
+		};
+	};
+
+	psci {
+		compatible = "arm,psci-0.2";
+		method = "smc";
+	};
+
+	gic: interrupt-controller@ff841000 {
+		compatible = "arm,gic-400";
+		#interrupt-cells = <3>;
+		#address-cells = <0>;
+		interrupt-controller;
+		reg = <0 0xff841000 0 0x1000>, /* GICD */
+			<0 0xff842000 0 0x2000>, /* GICC */
+			<0 0xff844000 0 0x2000>,
+			<0 0xff846000 0 0x2000>;
+	};
+
+	timer {
+		compatible = "arm,armv8-timer";
+		interrupts = <1 13 0xf08>,
+				 <1 14 0xf08>,
+				 <1 11 0xf08>,
+				 <1 10 0xf08>;
+	};
+
+	v2m_clk24mhz: clk24mhz@0 {
+		compatible = "fixed-clock";
+		#clock-cells = <0>;
+		reg = <0 0 0 0>;
+		clock-frequency = <24000000>;
+		clock-output-names = "v2m:clk24mhz";
+	};
+
+	v2m_serial0: uart@fe201000 {
+		compatible = "arm,pl011", "arm,primecell";
+		reg = <0 0xfe201000 0 0x1000>;
+		interrupts = <0 121 0xf04>;
+		clocks = <&v2m_clk24mhz>, <&v2m_clk24mhz>;
+		clock-names = "uartclk", "apb_pclk";
+	};
+};

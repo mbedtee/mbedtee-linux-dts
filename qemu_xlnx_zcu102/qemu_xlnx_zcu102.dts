@@ -1,0 +1,106 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright (c) 2025 KapaXL (kapa.xl@outlook.com)
+ *
+ * qemu xlnx-zcu102 Cortex-A53x4 Minimum-System
+ */
+
+/dts-v1/;
+
+#include "memory.dtsi"
+
+/ {
+	model = "qemu-xlnx-zcu102";
+	compatible = "qemu,xlnx-zcu102";
+	interrupt-parent = <&gic>;
+	#address-cells = <2>;
+	#size-cells = <2>;
+
+	aliases {
+		serial0 = &zynqmp_uart0;
+	};
+
+	chosen {
+		bootargs = "console=ttyPS0,115200n8 root=/dev/ram0 rootwait earlycon=cdns,mmio32,0xff000000,115200n8";
+	};
+
+	cpus {
+		#address-cells = <2>;
+		#size-cells = <0>;
+
+		cpu@0 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			enable-method = "psci";
+			reg = <0 0>;
+			next-level-cache = <&L2_0>;
+		};
+
+		cpu@1 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			enable-method = "psci";
+			reg = <0 1>;
+			next-level-cache = <&L2_0>;
+		};
+
+		cpu@2 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			enable-method = "psci";
+			reg = <0 2>;
+			next-level-cache = <&L2_0>;
+		};
+
+		cpu@3 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			enable-method = "psci";
+			reg = <0 3>;
+			next-level-cache = <&L2_0>;
+		};
+
+		L2_0: l2-cache0 {
+			compatible = "cache";
+		};
+	};
+
+	psci {
+		compatible = "arm,psci-0.2";
+		method = "smc";
+	};
+
+	gic: interrupt-controller@f9010000 {
+		compatible = "arm,gic-400";
+		#interrupt-cells = <3>;
+		#address-cells = <0>;
+		interrupt-controller;
+		reg = <0 0xf9010000 0 0x10000>, /* GICD */
+			<0 0xf9020000 0 0x20000>, /* GICC */
+			<0 0xf9040000 0 0x20000>,
+			<0 0xf9060000 0 0x20000>;
+	};
+
+	timer {
+		compatible = "arm,armv8-timer";
+		interrupts = <1 13 0xf08>,
+				 <1 14 0xf08>,
+				 <1 11 0xf08>,
+				 <1 10 0xf08>;
+	};
+
+	clk133mhz: clk-133mhz {
+		compatible = "fixed-clock";
+		#clock-cells = <0>;
+		clock-frequency = <133000000>;
+		clock-output-names = "clk133mhz";
+	};
+
+	zynqmp_uart0: uart@ff000000 {
+		compatible = "cdns,uart-r1p12", "xlnx,zynqmp-uart";
+		reg = <0 0xff000000 0 0x1000>;
+		interrupts = <0 21 0xf04>;
+		clocks = <&clk133mhz>, <&clk133mhz>;
+		clock-names = "uart_clk", "pclk";
+	};
+};

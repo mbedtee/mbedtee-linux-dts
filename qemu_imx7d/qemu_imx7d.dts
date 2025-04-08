@@ -1,0 +1,88 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright (c) 2025 KapaXL (kapa.xl@outlook.com)
+ *
+ * QEMU mcimx7d-sabre (CA7x2)
+ */
+
+/dts-v1/;
+
+#include "memory.dtsi"
+
+/ {
+	model = "QEMU-IMX7D";
+	compatible = "qemu,mcimx7d-sabre";
+	interrupt-parent = <&gic>;
+	#address-cells = <2>;
+	#size-cells = <1>;
+
+	aliases {
+		serial0 = &imx_uart1;
+	};
+	
+	chosen {
+		bootargs = "console=ttymxc0,115200n8 root=/dev/ram0 rootwait earlycon=ec_imx21,mmio32,0x30860000,115200n8";
+	};
+
+	cpus {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		cpu@0 {
+			device_type = "cpu";
+			compatible = "arm,armv7";
+			enable-method = "psci";
+			reg = <0>;
+			clock-frequency = <1000000000>;
+		};
+
+		cpu@1 {
+			device_type = "cpu";
+			compatible = "arm,armv7";
+			enable-method = "psci";
+			reg = <1>;
+			clock-frequency = <1000000000>;
+		};
+	};
+
+	psci {
+		compatible = "arm,psci-0.2";
+		method = "smc";
+	};
+
+	gic: interrupt-controller@31001000 {
+		compatible = "arm,cortex-a15-gic", "arm,cortex-a7-gic";
+		#interrupt-cells = <3>;
+		#address-cells = <0>;
+		interrupt-controller;
+		reg = <0 0x31001000 0x10000>,
+			  <0 0x31002000 0x2000>,
+			  <0 0x31004000 0x2000>,
+			  <0 0x31006000 0x2000>;
+
+		interrupts = <1 9 0xf04>;
+	};
+
+	timer {
+		compatible = "arm,armv7-timer";
+		interrupts = <1 13 0xf08>,
+				 <1 14 0xf08>,
+				 <1 11 0xf08>,
+				 <1 10 0xf08>;
+	};
+
+	clk24mhz: clk-24mhz {
+		compatible = "fixed-clock";
+		#clock-cells = <0>;
+		clock-frequency = <24000000>;
+		clock-output-names = "clk24mhz";
+	};
+
+	imx_uart1: uart@30860000 {
+		compatible = "fsl,imx21-uart";
+		reg = <0 0x30860000 0x1000>;
+		interrupts = <0 26 0xf04>;
+		clocks = <&clk24mhz>, <&clk24mhz>;
+		clock-names = "ipg", "per";
+	};
+};
