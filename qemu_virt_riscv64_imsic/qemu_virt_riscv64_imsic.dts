@@ -1,0 +1,439 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright (c) 2025 KapaXL (kapa.xl@outlook.com)
+ *
+ * QEMU virt RISCV64 with APLIC-IMSIC
+ */
+
+/dts-v1/;
+
+#define IRQ_TYPE_LEVEL_HIGH	4
+
+#include "memory.dtsi"
+
+/ {
+	#address-cells = <0x02>;
+	#size-cells = <0x02>;
+	compatible = "riscv-virtio";
+	model = "riscv-virtio,qemu";
+
+	poweroff {
+		value = <0x5555>;
+		offset = <0x00>;
+		regmap = <&test>;
+		compatible = "syscon-poweroff";
+	};
+
+	reboot {
+		value = <0x7777>;
+		offset = <0x00>;
+		regmap = <&test>;
+		compatible = "syscon-reboot";
+	};
+
+	platform-bus@4000000 {
+		interrupt-parent = <&aplic>;
+		ranges = <0x00 0x00 0x4000000 0x2000000>;
+		#address-cells = <0x01>;
+		#size-cells = <0x01>;
+		compatible = "qemu,platform\0simple-bus";
+	};
+
+	cpus {
+		#address-cells = <0x01>;
+		#size-cells = <0x00>;
+		timebase-frequency = <0x989680>;
+
+		cpu_0: cpu@0 {
+			device_type = "cpu";
+			reg = <0x00>;
+			status = "disabled";
+			compatible = "riscv";
+			riscv,cbop-block-size = <0x40>;
+			riscv,cboz-block-size = <0x40>;
+			riscv,cbom-block-size = <0x40>;
+			riscv,isa-extensions = "i\0m\0a\0f\0d\0c\0h\0zic64b\0zicbom\0zicbop\0zicboz\0ziccamoa\0ziccif\0zicclsm\0ziccrse\0zicntr\0zicsr\0zifencei\0zihintntl\0zihintpause\0zihpm\0zmmul\0za64rs\0zaamo\0zalrsc\0zawrs\0zfa\0zca\0zcd\0zba\0zbb\0zbc\0zbs\0sdtrig\0shcounterenw\0shgatpa\0shtvala\0shvsatpa\0shvstvala\0shvstvecd\0smaia\0ssaia\0ssccptr\0sscounterenw\0ssstrict\0sstc\0sstvala\0sstvecd\0ssu64xl\0svadu\0svvptc";
+			riscv,isa-base = "rv64i";
+			riscv,isa = "rv64imafdch_zic64b_zicbom_zicbop_zicboz_ziccamoa_ziccif_zicclsm_ziccrse_zicntr_zicsr_zifencei_zihintntl_zihintpause_zihpm_zmmul_za64rs_zaamo_zalrsc_zawrs_zfa_zca_zcd_zba_zbb_zbc_zbs_sdtrig_shcounterenw_shgatpa_shtvala_shvsatpa_shvstvala_shvstvecd_smaia_ssaia_ssccptr_sscounterenw_ssstrict_sstc_sstvala_sstvecd_ssu64xl_svadu_svvptc";
+			mmu-type = "riscv,sv57";
+
+			cpu_0_intc: interrupt-controller {
+				#interrupt-cells = <0x01>;
+				interrupt-controller;
+				compatible = "riscv,cpu-intc";
+			};
+		};
+
+		cpu_1: cpu@1 {
+			device_type = "cpu";
+			reg = <0x01>;
+			status = "disabled";
+			compatible = "riscv";
+			riscv,cbop-block-size = <0x40>;
+			riscv,cboz-block-size = <0x40>;
+			riscv,cbom-block-size = <0x40>;
+			riscv,isa-extensions = "i\0m\0a\0f\0d\0c\0h\0zic64b\0zicbom\0zicbop\0zicboz\0ziccamoa\0ziccif\0zicclsm\0ziccrse\0zicntr\0zicsr\0zifencei\0zihintntl\0zihintpause\0zihpm\0zmmul\0za64rs\0zaamo\0zalrsc\0zawrs\0zfa\0zca\0zcd\0zba\0zbb\0zbc\0zbs\0sdtrig\0shcounterenw\0shgatpa\0shtvala\0shvsatpa\0shvstvala\0shvstvecd\0smaia\0ssaia\0ssccptr\0sscounterenw\0ssstrict\0sstc\0sstvala\0sstvecd\0ssu64xl\0svadu\0svvptc";
+			riscv,isa-base = "rv64i";
+			riscv,isa = "rv64imafdch_zic64b_zicbom_zicbop_zicboz_ziccamoa_ziccif_zicclsm_ziccrse_zicntr_zicsr_zifencei_zihintntl_zihintpause_zihpm_zmmul_za64rs_zaamo_zalrsc_zawrs_zfa_zca_zcd_zba_zbb_zbc_zbs_sdtrig_shcounterenw_shgatpa_shtvala_shvsatpa_shvstvala_shvstvecd_smaia_ssaia_ssccptr_sscounterenw_ssstrict_sstc_sstvala_sstvecd_ssu64xl_svadu_svvptc";
+			mmu-type = "riscv,sv57";
+
+			cpu_1_intc: interrupt-controller {
+				#interrupt-cells = <0x01>;
+				interrupt-controller;
+				compatible = "riscv,cpu-intc";
+			};
+		};
+		cpu_2: cpu@2 {
+			device_type = "cpu";
+			reg = <0x02>;
+			status = "disabled";
+			compatible = "riscv";
+			riscv,cbop-block-size = <0x40>;
+			riscv,cboz-block-size = <0x40>;
+			riscv,cbom-block-size = <0x40>;
+			riscv,isa-extensions = "i\0m\0a\0f\0d\0c\0h\0zic64b\0zicbom\0zicbop\0zicboz\0ziccamoa\0ziccif\0zicclsm\0ziccrse\0zicntr\0zicsr\0zifencei\0zihintntl\0zihintpause\0zihpm\0zmmul\0za64rs\0zaamo\0zalrsc\0zawrs\0zfa\0zca\0zcd\0zba\0zbb\0zbc\0zbs\0sdtrig\0shcounterenw\0shgatpa\0shtvala\0shvsatpa\0shvstvala\0shvstvecd\0smaia\0ssaia\0ssccptr\0sscounterenw\0ssstrict\0sstc\0sstvala\0sstvecd\0ssu64xl\0svadu\0svvptc";
+			riscv,isa-base = "rv64i";
+			riscv,isa = "rv64imafdch_zic64b_zicbom_zicbop_zicboz_ziccamoa_ziccif_zicclsm_ziccrse_zicntr_zicsr_zifencei_zihintntl_zihintpause_zihpm_zmmul_za64rs_zaamo_zalrsc_zawrs_zfa_zca_zcd_zba_zbb_zbc_zbs_sdtrig_shcounterenw_shgatpa_shtvala_shvsatpa_shvstvala_shvstvecd_smaia_ssaia_ssccptr_sscounterenw_ssstrict_sstc_sstvala_sstvecd_ssu64xl_svadu_svvptc";
+			mmu-type = "riscv,sv57";
+
+			cpu_2_intc: interrupt-controller {
+				#interrupt-cells = <0x01>;
+				interrupt-controller;
+				compatible = "riscv,cpu-intc";
+			};
+		};
+		cpu_3: cpu@3 {
+			device_type = "cpu";
+			reg = <0x03>;
+			status = "disabled";
+			compatible = "riscv";
+			riscv,cbop-block-size = <0x40>;
+			riscv,cboz-block-size = <0x40>;
+			riscv,cbom-block-size = <0x40>;
+			riscv,isa-extensions = "i\0m\0a\0f\0d\0c\0h\0zic64b\0zicbom\0zicbop\0zicboz\0ziccamoa\0ziccif\0zicclsm\0ziccrse\0zicntr\0zicsr\0zifencei\0zihintntl\0zihintpause\0zihpm\0zmmul\0za64rs\0zaamo\0zalrsc\0zawrs\0zfa\0zca\0zcd\0zba\0zbb\0zbc\0zbs\0sdtrig\0shcounterenw\0shgatpa\0shtvala\0shvsatpa\0shvstvala\0shvstvecd\0smaia\0ssaia\0ssccptr\0sscounterenw\0ssstrict\0sstc\0sstvala\0sstvecd\0ssu64xl\0svadu\0svvptc";
+			riscv,isa-base = "rv64i";
+			riscv,isa = "rv64imafdch_zic64b_zicbom_zicbop_zicboz_ziccamoa_ziccif_zicclsm_ziccrse_zicntr_zicsr_zifencei_zihintntl_zihintpause_zihpm_zmmul_za64rs_zaamo_zalrsc_zawrs_zfa_zca_zcd_zba_zbb_zbc_zbs_sdtrig_shcounterenw_shgatpa_shtvala_shvsatpa_shvstvala_shvstvecd_smaia_ssaia_ssccptr_sscounterenw_ssstrict_sstc_sstvala_sstvecd_ssu64xl_svadu_svvptc";
+			mmu-type = "riscv,sv57";
+
+			cpu_3_intc: interrupt-controller {
+				#interrupt-cells = <0x01>;
+				interrupt-controller;
+				compatible = "riscv,cpu-intc";
+			};
+		};
+		cpu_4: cpu@4 {
+			device_type = "cpu";
+			reg = <0x04>;
+			status = "okay";
+			compatible = "riscv";
+			riscv,cbop-block-size = <0x40>;
+			riscv,cboz-block-size = <0x40>;
+			riscv,cbom-block-size = <0x40>;
+			riscv,isa-extensions = "i\0m\0a\0f\0d\0c\0h\0zic64b\0zicbom\0zicbop\0zicboz\0ziccamoa\0ziccif\0zicclsm\0ziccrse\0zicntr\0zicsr\0zifencei\0zihintntl\0zihintpause\0zihpm\0zmmul\0za64rs\0zaamo\0zalrsc\0zawrs\0zfa\0zca\0zcd\0zba\0zbb\0zbc\0zbs\0sdtrig\0shcounterenw\0shgatpa\0shtvala\0shvsatpa\0shvstvala\0shvstvecd\0smaia\0ssaia\0ssccptr\0sscounterenw\0ssstrict\0sstc\0sstvala\0sstvecd\0ssu64xl\0svadu\0svvptc";
+			riscv,isa-base = "rv64i";
+			riscv,isa = "rv64imafdch_zic64b_zicbom_zicbop_zicboz_ziccamoa_ziccif_zicclsm_ziccrse_zicntr_zicsr_zifencei_zihintntl_zihintpause_zihpm_zmmul_za64rs_zaamo_zalrsc_zawrs_zfa_zca_zcd_zba_zbb_zbc_zbs_sdtrig_shcounterenw_shgatpa_shtvala_shvsatpa_shvstvala_shvstvecd_smaia_ssaia_ssccptr_sscounterenw_ssstrict_sstc_sstvala_sstvecd_ssu64xl_svadu_svvptc";
+			mmu-type = "riscv,sv57";
+
+			cpu_4_intc: interrupt-controller {
+				#interrupt-cells = <0x01>;
+				interrupt-controller;
+				compatible = "riscv,cpu-intc";
+			};
+		};
+		cpu_5: cpu@5 {
+			device_type = "cpu";
+			reg = <0x05>;
+			status = "okay";
+			compatible = "riscv";
+			riscv,cbop-block-size = <0x40>;
+			riscv,cboz-block-size = <0x40>;
+			riscv,cbom-block-size = <0x40>;
+			riscv,isa-extensions = "i\0m\0a\0f\0d\0c\0h\0zic64b\0zicbom\0zicbop\0zicboz\0ziccamoa\0ziccif\0zicclsm\0ziccrse\0zicntr\0zicsr\0zifencei\0zihintntl\0zihintpause\0zihpm\0zmmul\0za64rs\0zaamo\0zalrsc\0zawrs\0zfa\0zca\0zcd\0zba\0zbb\0zbc\0zbs\0sdtrig\0shcounterenw\0shgatpa\0shtvala\0shvsatpa\0shvstvala\0shvstvecd\0smaia\0ssaia\0ssccptr\0sscounterenw\0ssstrict\0sstc\0sstvala\0sstvecd\0ssu64xl\0svadu\0svvptc";
+			riscv,isa-base = "rv64i";
+			riscv,isa = "rv64imafdch_zic64b_zicbom_zicbop_zicboz_ziccamoa_ziccif_zicclsm_ziccrse_zicntr_zicsr_zifencei_zihintntl_zihintpause_zihpm_zmmul_za64rs_zaamo_zalrsc_zawrs_zfa_zca_zcd_zba_zbb_zbc_zbs_sdtrig_shcounterenw_shgatpa_shtvala_shvsatpa_shvstvala_shvstvecd_smaia_ssaia_ssccptr_sscounterenw_ssstrict_sstc_sstvala_sstvecd_ssu64xl_svadu_svvptc";
+			mmu-type = "riscv,sv57";
+
+			cpu_5_intc: interrupt-controller {
+				#interrupt-cells = <0x01>;
+				interrupt-controller;
+				compatible = "riscv,cpu-intc";
+			};
+		};
+		cpu_6: cpu@6 {
+			device_type = "cpu";
+			reg = <0x06>;
+			status = "okay";
+			compatible = "riscv";
+			riscv,cbop-block-size = <0x40>;
+			riscv,cboz-block-size = <0x40>;
+			riscv,cbom-block-size = <0x40>;
+			riscv,isa-extensions = "i\0m\0a\0f\0d\0c\0h\0zic64b\0zicbom\0zicbop\0zicboz\0ziccamoa\0ziccif\0zicclsm\0ziccrse\0zicntr\0zicsr\0zifencei\0zihintntl\0zihintpause\0zihpm\0zmmul\0za64rs\0zaamo\0zalrsc\0zawrs\0zfa\0zca\0zcd\0zba\0zbb\0zbc\0zbs\0sdtrig\0shcounterenw\0shgatpa\0shtvala\0shvsatpa\0shvstvala\0shvstvecd\0smaia\0ssaia\0ssccptr\0sscounterenw\0ssstrict\0sstc\0sstvala\0sstvecd\0ssu64xl\0svadu\0svvptc";
+			riscv,isa-base = "rv64i";
+			riscv,isa = "rv64imafdch_zic64b_zicbom_zicbop_zicboz_ziccamoa_ziccif_zicclsm_ziccrse_zicntr_zicsr_zifencei_zihintntl_zihintpause_zihpm_zmmul_za64rs_zaamo_zalrsc_zawrs_zfa_zca_zcd_zba_zbb_zbc_zbs_sdtrig_shcounterenw_shgatpa_shtvala_shvsatpa_shvstvala_shvstvecd_smaia_ssaia_ssccptr_sscounterenw_ssstrict_sstc_sstvala_sstvecd_ssu64xl_svadu_svvptc";
+			mmu-type = "riscv,sv57";
+
+			cpu_6_intc: interrupt-controller {
+				#interrupt-cells = <0x01>;
+				interrupt-controller;
+				compatible = "riscv,cpu-intc";
+			};
+		};
+		cpu_7: cpu@7 {
+			device_type = "cpu";
+			reg = <0x07>;
+			status = "okay";
+			compatible = "riscv";
+			riscv,cbop-block-size = <0x40>;
+			riscv,cboz-block-size = <0x40>;
+			riscv,cbom-block-size = <0x40>;
+			riscv,isa-extensions = "i\0m\0a\0f\0d\0c\0h\0zic64b\0zicbom\0zicbop\0zicboz\0ziccamoa\0ziccif\0zicclsm\0ziccrse\0zicntr\0zicsr\0zifencei\0zihintntl\0zihintpause\0zihpm\0zmmul\0za64rs\0zaamo\0zalrsc\0zawrs\0zfa\0zca\0zcd\0zba\0zbb\0zbc\0zbs\0sdtrig\0shcounterenw\0shgatpa\0shtvala\0shvsatpa\0shvstvala\0shvstvecd\0smaia\0ssaia\0ssccptr\0sscounterenw\0ssstrict\0sstc\0sstvala\0sstvecd\0ssu64xl\0svadu\0svvptc";
+			riscv,isa-base = "rv64i";
+			riscv,isa = "rv64imafdch_zic64b_zicbom_zicbop_zicboz_ziccamoa_ziccif_zicclsm_ziccrse_zicntr_zicsr_zifencei_zihintntl_zihintpause_zihpm_zmmul_za64rs_zaamo_zalrsc_zawrs_zfa_zca_zcd_zba_zbb_zbc_zbs_sdtrig_shcounterenw_shgatpa_shtvala_shvsatpa_shvstvala_shvstvecd_smaia_ssaia_ssccptr_sscounterenw_ssstrict_sstc_sstvala_sstvecd_ssu64xl_svadu_svvptc";
+			mmu-type = "riscv,sv57";
+
+			cpu_7_intc: interrupt-controller {
+				#interrupt-cells = <0x01>;
+				interrupt-controller;
+				compatible = "riscv,cpu-intc";
+			};
+		};
+
+		cpu-map {
+			cluster0 {
+				core0 {
+					cpu = <&cpu_0>;
+				};
+
+				core1 {
+					cpu = <&cpu_1>;
+				};
+
+				core2 {
+					cpu = <&cpu_2>;
+				};
+
+				core3 {
+					cpu = <&cpu_3>;
+				};
+
+				core4 {
+					cpu = <&cpu_4>;
+				};
+
+				core5 {
+					cpu = <&cpu_5>;
+				};
+
+				core6 {
+					cpu = <&cpu_6>;
+				};
+
+				core7 {
+					cpu = <&cpu_7>;
+				};
+			};
+		};
+	};
+
+	pmu {
+		riscv,event-to-mhpmcounters = <0x01 0x01 0x7fff9 0x02 0x02 0x7fffc 0x10019 0x10019 0x7fff8 0x1001b 0x1001b 0x7fff8 0x10021 0x10021 0x7fff8>;
+		compatible = "riscv,pmu";
+	};
+
+	fw-cfg@10100000 {
+		dma-coherent;
+		reg = <0x00 0x10100000 0x00 0x18>;
+		compatible = "qemu,fw-cfg-mmio";
+	};
+
+	flash@20000000 {
+		bank-width = <0x04>;
+		reg = <0x00 0x20000000 0x00 0x2000000 0x00 0x22000000 0x00 0x2000000>;
+		compatible = "cfi-flash";
+	};
+
+	chosen {
+		bootargs = "console=ttyS0,115200n8 root=/dev/ram0 rootwait earlycon=sbi";
+		rng-seed = <0xba83bec0 0xac8aad98 0x8e2267c 0x545314cb 0x74f90f98 0x874bc98b 0x9bea8e41 0x297fd367>;
+	};
+
+	soc {
+		#address-cells = <0x02>;
+		#size-cells = <0x02>;
+		compatible = "simple-bus";
+		ranges;
+
+		rtc@101000 {
+			interrupts = <0x0b IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&aplic>;
+			reg = <0x00 0x101000 0x00 0x1000>;
+			compatible = "google,goldfish-rtc";
+		};
+
+		serial@10000000 {
+			interrupts = <0x0a IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&aplic>;
+			clock-frequency = <3686400>;
+			reg = <0x00 0x10000000 0x00 0x100>;
+			compatible = "ns16550a";
+		};
+
+		test: test@100000 {
+			reg = <0x00 0x100000 0x00 0x1000>;
+			compatible = "sifive,test1\0sifive,test0\0syscon";
+		};
+
+		pci@30000000 {
+			interrupt-map-mask = <0x1800 0x00 0x00 0x07>;
+			interrupt-map = <
+				0x00 0x00 0x00 0x01 &aplic 0x20 IRQ_TYPE_LEVEL_HIGH
+				0x00 0x00 0x00 0x02 &aplic 0x21 IRQ_TYPE_LEVEL_HIGH
+				0x00 0x00 0x00 0x03 &aplic 0x22 IRQ_TYPE_LEVEL_HIGH
+				0x00 0x00 0x00 0x04 &aplic 0x23 IRQ_TYPE_LEVEL_HIGH
+				0x800 0x00 0x00 0x01 &aplic 0x21 IRQ_TYPE_LEVEL_HIGH
+				0x800 0x00 0x00 0x02 &aplic 0x22 IRQ_TYPE_LEVEL_HIGH
+				0x800 0x00 0x00 0x03 &aplic 0x23 IRQ_TYPE_LEVEL_HIGH
+				0x800 0x00 0x00 0x04 &aplic 0x20 IRQ_TYPE_LEVEL_HIGH
+				0x1000 0x00 0x00 0x01 &aplic 0x22 IRQ_TYPE_LEVEL_HIGH
+				0x1000 0x00 0x00 0x02 &aplic 0x23 IRQ_TYPE_LEVEL_HIGH
+				0x1000 0x00 0x00 0x03 &aplic 0x20 IRQ_TYPE_LEVEL_HIGH
+				0x1000 0x00 0x00 0x04 &aplic 0x21 IRQ_TYPE_LEVEL_HIGH
+				0x1800 0x00 0x00 0x01 &aplic 0x23 IRQ_TYPE_LEVEL_HIGH
+				0x1800 0x00 0x00 0x02 &aplic 0x20 IRQ_TYPE_LEVEL_HIGH
+				0x1800 0x00 0x00 0x03 &aplic 0x21 IRQ_TYPE_LEVEL_HIGH
+				0x1800 0x00 0x00 0x04 &aplic 0x22 IRQ_TYPE_LEVEL_HIGH>;
+			ranges = <0x1000000 0x00 0x00 0x00 0x3000000 0x00 0x10000
+					0x2000000 0x00 0x40000000 0x00 0x40000000 0x00 0x40000000
+					0x3000000 0x03 0x00 0x03 0x00 0x01 0x00>;
+			reg = <0x00 0x30000000 0x00 0x10000000>;
+			msi-parent = <&imsic>;
+			dma-coherent;
+			bus-range = <0x00 0xff>;
+			linux,pci-domain = <0x00>;
+			device_type = "pci";
+			compatible = "pci-host-ecam-generic";
+			#size-cells = <0x02>;
+			#interrupt-cells = <0x01>;
+			#address-cells = <0x03>;
+		};
+
+		virtio_mmio@10008000 {
+			interrupts = <0x08 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&aplic>;
+			reg = <0x00 0x10008000 0x00 0x1000>;
+			compatible = "virtio,mmio";
+		};
+
+		virtio_mmio@10007000 {
+			interrupts = <0x07 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&aplic>;
+			reg = <0x00 0x10007000 0x00 0x1000>;
+			compatible = "virtio,mmio";
+		};
+
+		virtio_mmio@10006000 {
+			interrupts = <0x06 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&aplic>;
+			reg = <0x00 0x10006000 0x00 0x1000>;
+			compatible = "virtio,mmio";
+		};
+
+		virtio_mmio@10005000 {
+			interrupts = <0x05 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&aplic>;
+			reg = <0x00 0x10005000 0x00 0x1000>;
+			compatible = "virtio,mmio";
+		};
+
+		virtio_mmio@10004000 {
+			interrupts = <0x04 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&aplic>;
+			reg = <0x00 0x10004000 0x00 0x1000>;
+			compatible = "virtio,mmio";
+		};
+
+		virtio_mmio@10003000 {
+			interrupts = <0x03 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&aplic>;
+			reg = <0x00 0x10003000 0x00 0x1000>;
+			compatible = "virtio,mmio";
+		};
+
+		virtio_mmio@10002000 {
+			interrupts = <0x02 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&aplic>;
+			reg = <0x00 0x10002000 0x00 0x1000>;
+			compatible = "virtio,mmio";
+		};
+
+		virtio_mmio@10001000 {
+			interrupts = <0x01 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&aplic>;
+			reg = <0x00 0x10001000 0x00 0x1000>;
+			compatible = "virtio,mmio";
+		};
+
+		aplic: aplic@d000000 {
+			riscv,num-sources = <0x60>;
+			reg = <0x00 0xd000000 0x00 0x4000>;
+			msi-parent = <&imsic>;
+			interrupt-controller;
+			#interrupt-cells = <0x02>;
+			#address-cells = <0x00>;
+			compatible = "qemu,aplic\0riscv,aplic";
+		};
+
+		aplic_m: aplic@c000000 {
+			riscv,delegate = <&aplic 0x01 0x60>;
+			riscv,delegation = <&aplic 0x01 0x60>;
+			riscv,children = <&aplic>;
+			riscv,num-sources = <0x60>;
+			reg = <0x00 0xc000000 0x00 0x4000>;
+			msi-parent = <&imsic_m>;
+			interrupt-controller;
+			#interrupt-cells = <0x01>;
+			#address-cells = <0x00>;
+			compatible = "qemu,aplic\0riscv,aplic";
+		};
+
+		imsic: imsic@28000000 {
+			riscv,num-ids = <0xff>;
+			reg = <0x00 0x28000000 0x00 0x8000>;
+			riscv,guest-index-bits = <0x00>;
+			riscv,hart-index-bits = <0x03>;
+			interrupts-extended = <
+					&cpu_0_intc 0x09 &cpu_1_intc 0x09
+					&cpu_2_intc 0x09 &cpu_3_intc 0x09
+					&cpu_4_intc 0x09 &cpu_5_intc 0x09
+					&cpu_6_intc 0x09 &cpu_7_intc 0x09>;
+			msi-controller;
+			interrupt-controller;
+			#interrupt-cells = <0x00>;
+			compatible = "qemu,imsics\0riscv,imsics";
+		};
+
+		imsic_m: imsic@24000000 {
+			riscv,num-ids = <0xff>;
+			reg = <0x00 0x24000000 0x00 0x8000>;
+			interrupts-extended = <
+					&cpu_0_intc 0x0b &cpu_1_intc 0x0b
+					&cpu_2_intc 0x0b &cpu_3_intc 0x0b
+					&cpu_4_intc 0x0b &cpu_5_intc 0x0b
+					&cpu_6_intc 0x0b &cpu_7_intc 0x0b>;
+			msi-controller;
+			interrupt-controller;
+			#interrupt-cells = <0x00>;
+			compatible = "qemu,imsics\0riscv,imsics";
+		};
+
+		clint@2000000 {
+			interrupts-extended = <
+					&cpu_0_intc 0x03 &cpu_0_intc 0x07 &cpu_1_intc 0x03 &cpu_1_intc 0x07
+					&cpu_2_intc 0x03 &cpu_2_intc 0x07 &cpu_3_intc 0x03 &cpu_3_intc 0x07
+					&cpu_4_intc 0x03 &cpu_4_intc 0x07 &cpu_5_intc 0x03 &cpu_5_intc 0x07
+					&cpu_6_intc 0x03 &cpu_6_intc 0x07 &cpu_7_intc 0x03 &cpu_7_intc 0x07>;
+			reg = <0x00 0x2000000 0x00 0x10000>;
+			compatible = "sifive,clint0\0riscv,clint0";
+		};
+	};
+};
