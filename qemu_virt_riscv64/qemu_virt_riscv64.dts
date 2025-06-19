@@ -45,7 +45,7 @@
 		cpu_0: cpu@0 {
 			device_type = "cpu";
 			reg = <0x00>;
-			status = "okay";
+			status = "disable";
 			compatible = "riscv";
 			riscv,cbop-block-size = <0x40>;
 			riscv,cboz-block-size = <0x40>;
@@ -65,7 +65,7 @@
 		cpu_1: cpu@1 {
 			device_type = "cpu";
 			reg = <0x01>;
-			status = "okay";
+			status = "disable";
 			compatible = "riscv";
 			riscv,cbop-block-size = <0x40>;
 			riscv,cboz-block-size = <0x40>;
@@ -84,7 +84,7 @@
 		cpu_2: cpu@2 {
 			device_type = "cpu";
 			reg = <0x02>;
-			status = "okay";
+			status = "disable";
 			compatible = "riscv";
 			riscv,cbop-block-size = <0x40>;
 			riscv,cboz-block-size = <0x40>;
@@ -103,7 +103,7 @@
 		cpu_3: cpu@3 {
 			device_type = "cpu";
 			reg = <0x03>;
-			status = "okay";
+			status = "disable";
 			compatible = "riscv";
 			riscv,cbop-block-size = <0x40>;
 			riscv,cboz-block-size = <0x40>;
