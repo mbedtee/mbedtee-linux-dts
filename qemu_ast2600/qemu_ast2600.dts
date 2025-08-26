@@ -1,9 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
 /*
- * SPDX-License-Identifier: Apache-2.0
  * Copyright (c) 2025 Xing Loong <xing.xl.loong@gmail.com>
- *
  * QEMU-AST2600-ARMv7 (Cortex-A7 x 2)
- *
  * only present the nodes for a Minimum-System @ AST2600
  */
 
