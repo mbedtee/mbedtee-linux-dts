@@ -1,7 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
 /*
- * SPDX-License-Identifier: Apache-2.0
  * Copyright (c) 2025 Xing Loong <xing.xl.loong@gmail.com>
- *
  * QEMU mcimx7d-sabre (CA7x2)
  */
 
@@ -19,7 +18,7 @@
 	aliases {
 		serial0 = &imx_uart1;
 	};
-	
+
 	chosen {
 		bootargs = "console=ttymxc0,115200n8 root=/dev/ram0 rootwait earlycon=ec_imx21,mmio32,0x30860000,115200n8";
 	};

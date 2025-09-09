@@ -1,5 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
 /*
- * SPDX-License-Identifier: Apache-2.0
  * Copyright (c) 2025 Xing Loong <xing.xl.loong@gmail.com>
  */
 
@@ -7,14 +7,24 @@
 	#address-cells = <2>;
 	#size-cells = <2>;
 
-	memory@6000000 {
+	memory@0 {
 		compatible = "memory";
 		device_type = "memory";
 
 		reg = <0 0x00000000 0 0x80000000>;
+	};
 
-		rpc-t2r-ring = <0 0x05F10000 0 0x20000>;
-		rpc-t2r-shm = <0 0x05F30000 0 0x40000>;
+	firmware {
+		mbedtee {
+			compatible = "mbedtee,rpc";
+
+			/* GIC SPI edge-rising for TEE->REE notification */
+			interrupts = <0 72 1>;
+
+			/* shared memory regions */
+			memory-region = <&mbedtee_t2r_ring>, <&mbedtee_t2r_shm>;
+			memory-region-names = "rpc-t2r-ring", "rpc-t2r-shm";
+		};
 	};
 
 	reserved-memory {
@@ -22,8 +32,19 @@
 		#size-cells = <2>;
 		ranges;
 
-		reserved: resv@6000000 {
-			reg = <0 0x0000000 0 0x6000000>;
+		reserved: resv@0 {
+			reg = <0 0x00000000 0 0x5f10000>,
+				<0 0x05f70000 0 0x90000>;
+		};
+
+		mbedtee_t2r_ring: rpc-t2r-ring@05f10000 {
+			reg = <0 0x05f10000 0 0x20000>;
+			no-map;
+		};
+
+		mbedtee_t2r_shm: rpc-t2r-shm@05f30000 {
+			reg = <0 0x05f30000 0 0x40000>;
+			no-map;
 		};
 	};
 };
