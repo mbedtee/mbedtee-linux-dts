@@ -1,0 +1,114 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright (c) 2019 KapaXL (kapa.xl@outlook.com)
+ *
+ * QEMU-AST2700-ARMv8 (Cortex-A35 x 4)
+ *
+ * only present the nodes for a Minimum-System @ AST2700-A0
+ */
+
+/dts-v1/;
+
+#include "memory.dtsi"
+
+/ {
+	model = "QEMU-AST2700";
+	compatible = "qemu,ast2700";
+	interrupt-parent = <&gic>;
+	#address-cells = <2>;
+	#size-cells = <2>;
+
+	chosen { };
+
+	aliases {
+		serial0 = &uart12;
+	};
+
+	cpus {
+		#address-cells = <2>;
+		#size-cells = <0>;
+
+		cpu@0 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a35";
+			enable-method = "psci";
+			reg = <0 0>;
+			next-level-cache = <&L2_0>;
+		};
+
+		cpu@1 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a35";
+			enable-method = "psci";
+			reg = <0 1>;
+			next-level-cache = <&L2_0>;
+		};
+
+		cpu@2 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a35";
+			enable-method = "psci";
+			reg = <0 2>;
+			next-level-cache = <&L2_0>;
+		};
+
+		cpu@3 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a35";
+			enable-method = "psci";
+			reg = <0 3>;
+			next-level-cache = <&L2_0>;
+		};
+
+		L2_0: l2-cache0 {
+			compatible = "cache";
+		};
+	};
+
+	psci {
+		compatible = "arm,psci-0.2";
+		method = "smc";
+	};
+
+	timer {
+		compatible = "arm,armv8-timer";
+		interrupt-parent = <&gic>;
+		interrupts = <1 13 0xf08>,
+				 <1 14 0xf08>,
+				 <1 11 0xf08>,
+				 <1 10 0xf08>;
+	};
+
+	gic: interrupt-controller@12200000 {
+		compatible = "arm,gic-v3";
+		#interrupt-cells = <3>;
+		#size-cells = <0x02>;
+		#address-cells = <0x02>;
+		interrupt-controller;
+		reg = <0 0x12200000 0 0x10000>,
+			  <0 0x12280000 0 0x100000>;
+
+		interrupts = <1 9 0xf04>;
+	};
+
+	/* interrupt-controller: GIC132's SoC side */
+	intc_gic132: ast2700-intc-gic132@12101400 {
+		compatible = "aspeed,ast2700-intc-ic";
+		interrupt-controller;
+		#interrupt-cells = <1>;
+		interrupt-parent = <&gic>;
+		interrupts = <0 132 0xf04>;
+		reg = <0 0x12101400 0 0x8>;
+		max-irqs = <32>;
+	};
+
+	uart12: serial@14c33b00 {
+		compatible = "ns16550a";
+		reg = <0 0x14c33b00 0 0x1000>;
+		reg-shift = <2>;
+		reg-io-width = <4>;
+		interrupt-parent = <&intc_gic132>;
+		interrupts = <18>;
+		clock-frequency = <1846153>;
+	};
+};

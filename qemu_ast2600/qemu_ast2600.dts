@@ -1,0 +1,84 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright (c) 2019 KapaXL (kapa.xl@outlook.com)
+ *
+ * QEMU-AST2600-ARMv7 (Cortex-A7 x 2)
+ *
+ * only present the nodes for a Minimum-System @ AST2600
+ */
+
+/dts-v1/;
+
+#include "memory.dtsi"
+
+/ {
+	model = "QEMU-AST2600";
+	compatible = "qemu,ast2600";
+	interrupt-parent = <&gic>;
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	chosen { };
+
+	aliases {
+		serial0 = &uart5;
+	};
+
+	cpus {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		cpu@f00 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a7";
+			enable-method = "psci";
+			reg = <0xf00>;
+			clock-frequency = <1200000000>;
+		};
+
+		cpu@f01 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a7";
+			enable-method = "psci";
+			reg = <0xf01>;
+			clock-frequency = <1200000000>;
+		};
+	};
+
+	psci {
+		compatible = "arm,psci-0.2";
+		method = "smc";
+	};
+
+	gic: interrupt-controller@40461000 {
+		compatible = "arm,cortex-a7-gic";
+		#interrupt-cells = <3>;
+		#address-cells = <0>;
+		interrupt-controller;
+		reg = <0x40461000 0x1000>,
+		    <0x40462000 0x1000>,
+		    <0x40464000 0x2000>,
+		    <0x40466000 0x2000>;
+
+		interrupts = <1 9 0xf04>;
+	};
+
+	timer {
+		compatible = "arm,armv7-timer";
+		interrupt-parent = <&gic>;
+		interrupts = <1 13 0xf08>,
+				 <1 14 0xf08>,
+				 <1 11 0xf08>,
+				 <1 10 0xf08>;
+	};
+
+	uart5: serial@1e784000 {
+		compatible = "ns16550a";
+		reg = <0x1e784000 0x1000>;
+		reg-shift = <2>;
+		reg-io-width = <4>;
+		interrupt-parent = <&gic>;
+		interrupts = <0 8 0xf04>;
+		clock-frequency = <1846153>;
+	};
+};
