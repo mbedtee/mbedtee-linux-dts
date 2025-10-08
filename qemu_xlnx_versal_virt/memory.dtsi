@@ -7,14 +7,14 @@
 	#address-cells = <2>;
 	#size-cells = <2>;
 
-	memory@400000000 {
+	memory@6000000 {
 		compatible = "memory";
 		device_type = "memory";
 
-		reg = <4 0x00000000 0 0x80000000>;
+		reg = <0 0x00000000 0 0x80000000>;
 
-		rpc-t2r-ring = <4 0x15F10000 0 0x20000>;
-		rpc-t2r-shm = <4 0x15F30000 0 0x40000>;
+		rpc-t2r-ring = <0 0x05F10000 0 0x20000>;
+		rpc-t2r-shm = <0 0x05F30000 0 0x40000>;
 	};
 
 	reserved-memory {
@@ -22,8 +22,8 @@
 		#size-cells = <2>;
 		ranges;
 
-		reserved: resv@400000000 {
-			reg = <4 0x00000000 0 0x20000000>;
+		reserved: resv@6000000 {
+			reg = <0 0x0000000 0 0x6000000>;
 		};
 	};
 };

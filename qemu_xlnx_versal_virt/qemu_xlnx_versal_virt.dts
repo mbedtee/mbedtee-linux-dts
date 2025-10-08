@@ -1,0 +1,90 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright (c) 2025 KapaXL (kapa.xl@outlook.com)
+ *
+ * qemu xlnx-versal-virt Cortex-A72x2 Minimum-System
+ */
+
+/dts-v1/;
+
+#include "memory.dtsi"
+
+/ {
+	model = "qemu-xlnx-versal-virt";
+	compatible = "qemu,xlnx-versal-virt";
+	interrupt-parent = <&gic>;
+	#address-cells = <2>;
+	#size-cells = <2>;
+
+	chosen { };
+
+	aliases {
+		serial0 = &versal_uart0;
+	};
+
+	cpus {
+		#address-cells = <2>;
+		#size-cells = <0>;
+
+		cpu@0 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			enable-method = "psci";
+			reg = <0 0>;
+			next-level-cache = <&L2_0>;
+		};
+
+/*
+ due to the FPD_APU_PWRCTL is unimplemented,
+ guys can mask the QEMU 'start-powered-off' in
+ versal_create_apu_cpus() to enable the cpu-1
+		cpu@1 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			enable-method = "psci";
+			reg = <0 1>;
+			next-level-cache = <&L2_0>;
+		};
+*/
+		L2_0: l2-cache0 {
+			compatible = "cache";
+		};
+	};
+
+	psci {
+		compatible = "arm,psci-0.2";
+		method = "smc";
+	};
+
+	gic: interrupt-controller@f9000000 {
+		compatible = "arm,gic-v3";
+		#interrupt-cells = <3>;
+		#address-cells = <0>;
+		interrupt-controller;
+		reg = <0 0xf9000000 0 0x10000>, /* GICD */
+			<0 0xf9080000 0 0x80000>; /* GICR RD_Base / SGI_Base */
+	};
+
+	timer {
+		compatible = "arm,armv8-timer";
+		interrupts = <1 13 0xf08>,
+				 <1 14 0xf08>,
+				 <1 11 0xf08>,
+				 <1 10 0xf08>;
+	};
+
+	clk125mhz: clk-125mhz {
+		compatible = "fixed-clock";
+		#clock-cells = <0>;
+		clock-frequency = <125000000>;
+		clock-output-names = "clk125mhz";
+	};
+
+	versal_uart0: uart@ff000000 {
+		compatible = "arm,pl011", "arm,primecell";
+		reg = <0 0xff000000 0 0x1000>;
+		interrupts = <0 18 0xf04>;
+		clocks = <&clk125mhz>;
+		clock-names = "apb_pclk";
+	};
+};
