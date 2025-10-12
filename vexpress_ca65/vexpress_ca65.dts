@@ -1,12 +1,9 @@
+// SPDX-License-Identifier: Apache-2.0
 /*
- * SPDX-License-Identifier: Apache-2.0
  * Copyright (c) 2019 Xing Loong <xing.xl.loong@gmail.com>
- *
  * MultiThreading Supports:
- *
  * FVP_Base_Cortex_A65, FVP_Base_Cortex_A65AE
  * FVP_Base_Neoverse_E1
- *
  * (Each core has 2 threads, total 8x2=16 threads)
  */
 

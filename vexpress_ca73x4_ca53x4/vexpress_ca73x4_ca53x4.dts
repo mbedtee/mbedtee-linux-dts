@@ -1,7 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
 /*
- * SPDX-License-Identifier: Apache-2.0
  * Copyright (c) 2019 Xing Loong <xing.xl.loong@gmail.com>
- *
  * FVP_Base_Cortex_A73x4_A53x4, FVP_Base_Cortex_A72x4_A53x4
  * FVP_Base_Cortex_A57x4_A53x4, FVP_Base_Cortex_A72x4_A35x4
  * FVP_Base_Cortex_A57x4_A35x4

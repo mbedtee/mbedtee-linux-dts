@@ -1,0 +1,180 @@
+// SPDX-License-Identifier: Apache-2.0
+/*
+ * Copyright (c) 2025 Xing Loong <xing.xl.loong@gmail.com>
+ * QEMU Andes AE350 RISCV32 with APLIC-IMSIC (4 cores)
+ */
+
+/dts-v1/;
+
+#define IRQ_TYPE_LEVEL_HIGH 	4
+
+#include "memory.dtsi"
+
+/ {
+	#address-cells = <0x02>;
+	#size-cells = <0x02>;
+	compatible = "andestech,ae350";
+	model = "andestech,ae350";
+
+	cpus {
+		#address-cells = <0x01>;
+		#size-cells = <0x00>;
+		timebase-frequency = <60000000>;
+
+		cpu_0: cpu@0 {
+			device_type = "cpu";
+			reg = <0x00>;
+			status = "disabled";
+			compatible = "riscv";
+			riscv,isa-extensions = "i\0m\0a\0f\0d\0c\0zicsr\0zifencei\0smaia\0ssaia";
+			riscv,isa-base = "rv32i";
+			riscv,isa = "rv32imafdc_zicsr_zifencei_smaia_ssaia";
+			mmu-type = "riscv,sv32";
+
+			cpu_0_intc: interrupt-controller {
+				#interrupt-cells = <0x01>;
+				interrupt-controller;
+				compatible = "riscv,cpu-intc";
+			};
+		};
+
+		cpu_1: cpu@1 {
+			device_type = "cpu";
+			reg = <0x01>;
+			status = "disabled";
+			compatible = "riscv";
+			riscv,isa-extensions = "i\0m\0a\0f\0d\0c\0zicsr\0zifencei\0smaia\0ssaia";
+			riscv,isa-base = "rv32i";
+			riscv,isa = "rv32imafdc_zicsr_zifencei_smaia_ssaia";
+			mmu-type = "riscv,sv32";
+
+			cpu_1_intc: interrupt-controller {
+				#interrupt-cells = <0x01>;
+				interrupt-controller;
+				compatible = "riscv,cpu-intc";
+			};
+		};
+
+		cpu_2: cpu@2 {
+			device_type = "cpu";
+			reg = <0x02>;
+			status = "okay";
+			compatible = "riscv";
+			riscv,isa-extensions = "i\0m\0a\0f\0d\0c\0zicsr\0zifencei\0smaia\0ssaia";
+			riscv,isa-base = "rv32i";
+			riscv,isa = "rv32imafdc_zicsr_zifencei_smaia_ssaia";
+			mmu-type = "riscv,sv32";
+
+			cpu_2_intc: interrupt-controller {
+				#interrupt-cells = <0x01>;
+				interrupt-controller;
+				compatible = "riscv,cpu-intc";
+			};
+		};
+
+		cpu_3: cpu@3 {
+			device_type = "cpu";
+			reg = <0x03>;
+			status = "okay";
+			compatible = "riscv";
+			riscv,isa-extensions = "i\0m\0a\0f\0d\0c\0zicsr\0zifencei\0smaia\0ssaia";
+			riscv,isa-base = "rv32i";
+			riscv,isa = "rv32imafdc_zicsr_zifencei_smaia_ssaia";
+			mmu-type = "riscv,sv32";
+
+			cpu_3_intc: interrupt-controller {
+				#interrupt-cells = <0x01>;
+				interrupt-controller;
+				compatible = "riscv,cpu-intc";
+			};
+		};
+
+		cpu-map {
+			cluster0 {
+				core0 { cpu = <&cpu_0>; };
+				core1 { cpu = <&cpu_1>; };
+				core2 { cpu = <&cpu_2>; };
+				core3 { cpu = <&cpu_3>; };
+			};
+		};
+	};
+
+	chosen {
+		bootargs = "console=ttyS0,38400n8 root=/dev/ram0 rootwait earlycon=sbi";
+	};
+
+	soc {
+		#address-cells = <0x02>;
+		#size-cells = <0x02>;
+		compatible = "simple-bus";
+		ranges;
+
+		serial@f0200020 {
+			interrupts = <0x08 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&aplic>;
+			clock-frequency = <3686400>;
+			current-speed = <38400>;
+			reg = <0x00 0xf0200020 0x00 0x20>;
+			reg-shift = <2>;
+			reg-io-width = <4>;
+			compatible = "ns16550a";
+		};
+
+		aplic: aplic@e4408000 {
+			riscv,num-sources = <0x40>;
+			reg = <0x00 0xe4408000 0x00 0x8000>;
+			msi-parent = <&imsic>;
+			interrupt-controller;
+			#interrupt-cells = <0x02>;
+			#address-cells = <0x00>;
+			compatible = "qemu,aplic\0riscv,aplic";
+		};
+
+		aplic_m: aplic@e4400000 {
+			riscv,delegate = <&aplic 0x01 0x40>;
+			riscv,delegation = <&aplic 0x01 0x40>;
+			riscv,children = <&aplic>;
+			riscv,num-sources = <0x40>;
+			reg = <0x00 0xe4400000 0x00 0x8000>;
+			msi-parent = <&imsic_m>;
+			interrupt-controller;
+			#interrupt-cells = <0x01>;
+			#address-cells = <0x00>;
+			compatible = "qemu,aplic\0riscv,aplic";
+		};
+
+		imsic: imsic@c4100000 {
+			riscv,num-ids = <0xff>;
+			reg = <0x00 0xc4100000 0x00 0x4000>;
+			riscv,guest-index-bits = <0x00>;
+			riscv,hart-index-bits = <0x02>;
+			interrupts-extended = <
+				&cpu_0_intc 0x09 &cpu_1_intc 0x09
+				&cpu_2_intc 0x09 &cpu_3_intc 0x09>;
+			msi-controller;
+			interrupt-controller;
+			#interrupt-cells = <0x00>;
+			compatible = "qemu,imsics\0riscv,imsics";
+		};
+
+		imsic_m: imsic@c4000000 {
+			riscv,num-ids = <0xff>;
+			reg = <0x00 0xc4000000 0x00 0x4000>;
+			interrupts-extended = <
+				&cpu_0_intc 0x0b &cpu_1_intc 0x0b
+				&cpu_2_intc 0x0b &cpu_3_intc 0x0b>;
+			msi-controller;
+			interrupt-controller;
+			#interrupt-cells = <0x00>;
+			compatible = "qemu,imsics\0riscv,imsics";
+		};
+
+		plmt@e6000000 {
+			interrupts-extended = <
+				&cpu_0_intc 0x07 &cpu_1_intc 0x07
+				&cpu_2_intc 0x07 &cpu_3_intc 0x07>;
+			reg = <0x00 0xe6000000 0x00 0x100000>;
+			compatible = "andestech,plmt0";
+		};
+	};
+};
